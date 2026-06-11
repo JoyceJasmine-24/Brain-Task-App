@@ -1,13 +1,6 @@
 version: 0.2
 
 phases:
-  install:
-    commands:
-      - echo Installing kubectl...
-      - curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-      - chmod +x kubectl
-      - mv kubectl /usr/local/bin/
-
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
@@ -21,15 +14,9 @@ phases:
 
   post_build:
     commands:
-      - echo Pushing Docker image...
+      - echo Pushing image...
       - docker push 145689194017.dkr.ecr.ap-south-1.amazonaws.com/brain-tasks-app:latest
-
-      - echo Updating kubeconfig...
-      - aws eks update-kubeconfig --region ap-south-1 --name brain-tasks-cluster
-
-      - echo Deploying to EKS...
-      - kubectl apply -f k8s/deployment.yaml
-      - kubectl apply -f k8s/service.yaml
+      - echo Build completed successfully
 
 artifacts:
   files:
