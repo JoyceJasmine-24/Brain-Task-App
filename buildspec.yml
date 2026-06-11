@@ -16,7 +16,13 @@ phases:
     commands:
       - echo Pushing image...
       - docker push 145689194017.dkr.ecr.ap-south-1.amazonaws.com/brain-tasks-app:latest
-      - echo Build completed successfully
+
+      - echo Updating kubeconfig...
+      - aws eks update-kubeconfig --region ap-south-1 --name brain-tasks-cluster
+
+      - echo Deploying to EKS...
+      - kubectl apply -f deployment.yaml
+      - kubectl apply -f service.yaml
 
 artifacts:
   files:
